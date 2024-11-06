@@ -1151,50 +1151,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -13.19
       objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: SubModule.enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.color
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.light
-      value: 
-      objectReference: {fileID: 3166700318149196262, guid: 21ca5b54ec47dbc49b1676979cfb9533, type: 3}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.ratio
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.intensity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.rangeCurve.scalar
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263746811986412025, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: LightsModule.intensityCurve.scalar
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4467620566581365454, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
-      propertyPath: m_LightProbeUsage
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1718833779643657510, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1580194259}
   m_SourcePrefab: {fileID: 100100000, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
 --- !u!1 &1340504839
 GameObject:
@@ -1304,6 +1267,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1580194256 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1718833779643657510, guid: 6676d97c95b3bc041b6199c5579f69d4, type: 3}
+  m_PrefabInstance: {fileID: 1145778550}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1580194259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580194256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a38875d94431e64a9227ef9afb21dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _randomSpeed: 0.5
+  _startingIntensity: 1
+  _flicksPerSecond: 3
+  _flickerIntensity: 0.2
+  _startResetTimer: 5
 --- !u!1 &1677275700
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,11 +8,6 @@ public class PlayerLightSystem : MonoBehaviour
 
     [SerializeField] private Light _playerLight;
 
-    void Start()
-    {
-        
-    }
-
 
     void Update()
     {
