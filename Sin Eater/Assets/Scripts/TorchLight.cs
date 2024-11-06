@@ -1,13 +1,13 @@
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
-public class TorchLight : MonoBehaviour
+public class TorchLight : Interactable
 {
     private bool _hasLightLeft = true;
     private float  _resetTimer;
 
     private float LightIntensity = 1f;
-    [SerializeField] private float _randomSpeed, _startingIntensity = 1f, _flicksPerSecond = 3f, _flickerIntensity = 0.2f, _startResetTimer = 5f;
+    [SerializeField] private float _lightAmountForPlayer = 4, _randomSpeed, _startingIntensity = 1f, _flicksPerSecond = 3f, _flickerIntensity = 0.2f, _startResetTimer = 5f;
     private Light _light;
     private ParticleSystem _particles;
     private float _time;
@@ -15,8 +15,8 @@ public class TorchLight : MonoBehaviour
 
     void Start()
     {
-        _light = transform.GetComponentInChildren<Light>();
-        _particles = transform .GetComponentInChildren<ParticleSystem>();
+        _light = transform.parent.GetComponentInChildren<Light>();
+        _particles = transform .parent.GetComponentInChildren<ParticleSystem>();
         _resetTimer = _startResetTimer;
     }
 
@@ -73,5 +73,11 @@ public class TorchLight : MonoBehaviour
 
 
         _hasLightLeft = true;
+    }
+
+    public override void Interact()
+    {
+        PlayerLightSystem.Instance.AddLightAmount(_lightAmountForPlayer);
+        NoLightLeft();
     }
 }
