@@ -3,32 +3,34 @@ using UnityEngine;
 
 
 public class ArtifactSpawner : MonoBehaviour
-{
-    private Transform spawnLocation;
-
-
-    private bool usedSpawn;
+{ 
+    private bool[] usedSpawn;
     
-
-
-    public GameObject[] artifactList = new GameObject[5];
+    public GameObject[] artifactList;
     private int specificArtifact;
     public int x;
+    private void Awake()
+    {
+        
+    }
 
     private void SpawnArtifact()
     {
 
         specificArtifact = x;
-        if (x == 0 && usedSpawn == false)
-        {
-            Instantiate(artifactList[0], spawnLocation.position, Quaternion.identity);
-            
-            usedSpawn = true;
 
-        } if(x == 1 && usedSpawn == false)
+        
+
+        if (x == 0 && usedSpawn[0] == false)
         {
-            Instantiate(artifactList[1], spawnLocation.position, Quaternion.identity);
-            usedSpawn = true;
+            Instantiate(artifactList[0]);
+
+            usedSpawn[0] = true;
+
+        } if(x == 1 && usedSpawn[1] == false)
+        {
+            Instantiate(artifactList[1]);
+            usedSpawn[1] = true;
         }
     }
     
