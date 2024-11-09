@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float maxSpeed;
+    [SerializeField] private float health;
 
     private bool isOnGround;
     private float xRotation = 0f;
@@ -56,6 +57,22 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpMultiplier, ForceMode.Impulse);
             isOnGround = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("EnemyWeapon"))
+        {
+            // Bad stuff happen
+            health -= 1f;
+
+            Destroy(collision.gameObject);
+
+            if (health <= 0f)
+            {
+                Debug.Log("Died");
+            }
         }
     }
 
