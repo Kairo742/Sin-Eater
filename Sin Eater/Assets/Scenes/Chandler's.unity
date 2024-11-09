@@ -5167,6 +5167,7 @@ MonoBehaviour:
   jumpKey: 32
   mouseSensitivity: 300
   cameraTransform: {fileID: 963194228}
+  maxSpeed: 7
 --- !u!54 &1677275702
 Rigidbody:
   m_ObjectHideFlags: 0
