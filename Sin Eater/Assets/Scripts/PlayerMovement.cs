@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private KeyCode jumpKey;
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float maxSpeed;
 
     private bool isOnGround;
     private float xRotation = 0f;
@@ -43,7 +44,12 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dragForce = -new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z) * dragIntensity;
         rb.AddForce(dragForce);
 
-        rb.linearVelocity = new Vector3(Mathf.Clamp(rb.linearVelocity.x, -100000 * Time.deltaTime, 100000 * Time.deltaTime), rb.linearVelocity.y, Mathf.Clamp(rb.linearVelocity.z, -100000 * Time.deltaTime, 100000 * Time.deltaTime));
+        Vector3 vel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        if (vel.magnitude > maxSpeed)
+        {
+            vel = vel.normalized * maxSpeed;
+        }
+        rb.linearVelocity = new Vector3(vel.x, rb.linearVelocity.y, vel.z);
 
         // Jumping
         if (isOnGround && Input.GetKeyDown(jumpKey))
