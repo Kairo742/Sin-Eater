@@ -119,6 +119,43 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &144930522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3138476227369239754, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+  m_PrefabInstance: {fileID: 7687452574779170770}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &144930525 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1279424261177320200, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+  m_PrefabInstance: {fileID: 7687452574779170770}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &144930528
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144930522}
+  serializedVersion: 4
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &148912813
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,6 +802,7 @@ MonoBehaviour:
   LightAmount: 10
   PassiveLightDecay: 0.3
   _startChangeSpeedTimer: 2
+  _maxLight: 10
   _playerLight: {fileID: 1889383074}
 --- !u!114 &403437113
 MonoBehaviour:
@@ -2784,7 +2822,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 931799182748587371, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 931799182748587371, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2820,16 +2858,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3138476227369239754, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
       propertyPath: m_Name
-      value: Turret
+      value: Golem
+      objectReference: {fileID: 0}
+    - target: {fileID: 7730397651034660434, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+      propertyPath: speed
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7730397651034660434, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 403437111}
+    - target: {fileID: 7730397651034660434, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+      propertyPath: renderer
+      value: 
+      objectReference: {fileID: 144930525}
+    - target: {fileID: 7730397651034660434, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+      propertyPath: attackDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7730397651034660434, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+      propertyPath: attackMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ccb31c4a594c6544a7fc383d61575a1, type: 2}
+    - target: {fileID: 7730397651034660434, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+      propertyPath: normalMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 44659ad2f0590af4185ee995f33361bd, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3138476227369239754, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144930528}
   m_SourcePrefab: {fileID: 100100000, guid: 3f0adcdf57a53be4db3cd33434cd2361, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
