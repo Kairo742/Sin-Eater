@@ -7,6 +7,7 @@ public class PlayerLightSystem : MonoBehaviour
     public float PassiveLightDecay = 0.5f;      //Minus this value from Light Amount every second
     [SerializeField] private float _startChangeSpeedTimer = 2f;
     private float _changeSpeedTimer, _changeSpeed;
+    [SerializeField] private float _maxLight;
 
     [SerializeField] private Light _playerLight;
 
@@ -43,6 +44,11 @@ public class PlayerLightSystem : MonoBehaviour
 
 
             _changeSpeedTimer -= Time.deltaTime;
+        }
+
+        if (LightAmount > _maxLight)
+        {
+            LightAmount = _maxLight;
         }
     }
 
