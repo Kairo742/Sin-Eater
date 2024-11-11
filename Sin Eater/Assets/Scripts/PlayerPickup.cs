@@ -132,7 +132,7 @@ public class PlayerPickup : MonoBehaviour
     {
         if(_outlineIsActive && !_isHolding)
         {
-            if (Helpers.IsInLayerMask(_pickupableLayers, _heldObject.layer))  //&& _heldObject.TryGetComponent<Rigidbody>(out Rigidbody _) && _heldObject.TryGetComponent<Pickupable>(out Pickupable _)
+            if (Helpers.IsInLayerMask(_pickupableLayers, _heldObject.layer) && _heldObject.GetComponent<Rigidbody>() != null)  //&& _heldObject.TryGetComponent<Rigidbody>(out Rigidbody _) && _heldObject.TryGetComponent<Pickupable>(out Pickupable _)
             {
                 PickupObject();
             }
