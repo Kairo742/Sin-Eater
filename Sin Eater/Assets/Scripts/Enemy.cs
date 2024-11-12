@@ -1,64 +1,88 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Animations;
 
-public class Enemy : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject shot;
-    [SerializeField] private float playerSensitivity; // This variable controls how sensitive the enemy is to the player. Higher is more sensitive.
-    [SerializeField] private float attackDelayTime = 2f;
-    //[SerializeField] private float shootStrength = 10f; // For optional ranged attack later down the script
-    [SerializeField] private float speed;
+    [SerializeField] private float playerSensitivity = 5f;
     [SerializeField] private float attackDistance = 4f;
+    [SerializeField] private float movementSpeed = 2f;
+    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private float minimumDetectionRange = 10f;
 
-    [SerializeField] private MeshRenderer renderer;
-    [SerializeField] private Material normalMaterial;
-    [SerializeField] private Material attackMaterial;
-
-    private bool detectedPlayer;
+    private Animator animator;
+    private Rigidbody rb;
+    private float attackTimer = 0f;
 
     void Start()
     {
-        InvokeRepeating("ShootPlayer", 0.5f, attackDelayTime);
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        detectedPlayer = Vector3.Distance(player.transform.position, transform.position) / PlayerLightSystem.Instance.LightAmount < playerSensitivity; // Higher the light, the more chance of being found
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        if (detectedPlayer)
+        if (!IsPlayerDetected())
         {
-            renderer.material = attackMaterial;
-            Vector3 targetPosition = player.transform.position;
-            targetPosition.y = transform.position.y;  // Ensure the enemy only rotates on the Y-axis
-            transform.LookAt(targetPosition);
+            animator.SetFloat("speed", 0f);
+        }
 
-            if (Vector3.Distance(transform.position, player.transform.position) > attackDistance)
-            {
-                // Move directly towards the player
-                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-            }
+        if (IsPlayerDetected() && distanceToPlayer > attackDistance)
+        {
+            Vector3 pos = player.transform.position;
+            pos.y = transform.position.y;
+
+            Vector3 direction = (pos - transform.position).normalized;
+            rb.position += direction * movementSpeed * Time.deltaTime;
+            transform.LookAt(pos);
+
+            animator.SetFloat("speed", movementSpeed);
         }
         else
         {
-            renderer.material = normalMaterial;
+            animator.SetFloat("speed", 0f);
+        }
+
+        if (distanceToPlayer <= attackDistance && attackTimer <= 0f)
+        {
+            StartAttack();
+        }
+
+        if (attackTimer > 0f)
+        {
+            attackTimer -= Time.deltaTime;
         }
     }
 
-    void ShootPlayer()
+    bool IsPlayerDetected()
     {
-        // The golem is simply attacking the player every attackDelayTime seconds.
+        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        float detectionThreshold = distanceToPlayer / Mathf.Clamp(PlayerLightSystem.Instance.LightAmount, 0.1f, Mathf.Infinity);
+        if (distanceToPlayer <= minimumDetectionRange)
+        {
+            return true;
+        }
+        else
+        {
+            return detectionThreshold < playerSensitivity;
+        }
+    }
 
-        if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= attackDistance)
+    void StartAttack()
+    {
+        animator.SetBool("isAttacking", true);
+        Invoke("EndAttack", 0.95f);
+        attackTimer = attackCooldown;
+    }
+
+    void EndAttack()
+    {
+        animator.SetBool("isAttacking", false);
+        if (Vector3.Distance(player.transform.position, transform.position) < attackDistance + 1f)
         {
             player.GetComponent<PlayerMovement>().Attacked(1f);
-
-            /*
-            var cannonball = Instantiate(shot, transform.position + transform.forward * 2f, transform.rotation); // Ranged attack code if anybody needs it
-            cannonball.GetComponent<Rigidbody>().AddForce(transform.forward * shootStrength);
-            Physics.IgnoreCollision(cannonball.GetComponent<Collider>(), GetComponent<Collider>(), true);
-            */
         }
     }
 }
