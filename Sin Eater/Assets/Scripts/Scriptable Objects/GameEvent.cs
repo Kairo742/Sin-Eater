@@ -4,8 +4,16 @@ using UnityEngine;
 public class GameEvent : ScriptableObject
 {
     private List<GameEventListener> listeners = new List<GameEventListener>();
+    private bool IsTriggered = false;
+
+    private void OnEnable()
+    {
+        ClearTriggered();
+    }
+
     public void TriggerEvent()
     {
+        IsTriggered = true;
         for (int i = listeners.Count - 1; i >= 0; i--)
         {
             listeners[i].OnEventTriggered();
@@ -14,6 +22,7 @@ public class GameEvent : ScriptableObject
 
     public void TriggerEvent(GameObject gameObjectToSend)
     {
+        IsTriggered = true;
         for (int i = listeners.Count - 1; i >= 0; i--)
         {
             listeners[i].OnEventTriggered(gameObjectToSend);
@@ -34,5 +43,15 @@ public class GameEvent : ScriptableObject
     {
         // Add your button functionality here
         TriggerEvent();
+    }
+
+    public bool IsTriggeredBefore()
+    {
+        return IsTriggered;
+    }
+
+    public void ClearTriggered()
+    {
+        IsTriggered = false;
     }
 }
