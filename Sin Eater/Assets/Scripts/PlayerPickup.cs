@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerPickup : MonoBehaviour
 {
@@ -20,7 +18,7 @@ public class PlayerPickup : MonoBehaviour
     [SerializeField] private float _raycastDistance = 2f;
 
     
-
+    
 
 
     private void Start()
@@ -102,7 +100,7 @@ public class PlayerPickup : MonoBehaviour
             //If last hit is different from this hit
             if (_heldObject != null && _hitObj != _heldObject && _outlineIsActive)
             {
-                RemoveOutline(_heldObject.transform.gameObject);
+                RemoveOutline();
             }
 
 
@@ -118,7 +116,7 @@ public class PlayerPickup : MonoBehaviour
         {
             if (_outlineIsActive)
             {
-                RemoveOutline(_heldObject);
+                RemoveOutline();
             }
 
 
@@ -218,7 +216,7 @@ public class PlayerPickup : MonoBehaviour
 
 
 
-    private void RemoveOutline(GameObject go)
+    private void RemoveOutline()
     {
         _heldObject.GetComponent<Outline>().enabled = false;
 
