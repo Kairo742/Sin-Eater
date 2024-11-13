@@ -218,7 +218,11 @@ public class PlayerPickup : MonoBehaviour
 
     private void RemoveOutline()
     {
-        _heldObject.GetComponent<Outline>().enabled = false;
+        if(_heldObject != null && _heldObject.TryGetComponent<Outline>(out Outline outline))
+        {
+            outline.enabled = false;
+        }
+
 
         _outlineIsActive = false;
     }

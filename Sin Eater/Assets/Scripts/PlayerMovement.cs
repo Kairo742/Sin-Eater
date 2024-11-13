@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float maxSpeed;
-    [SerializeField] private float health;
+    [SerializeField] private float health = 1f;
 
     private bool isOnGround;
     private float xRotation = 0f;
