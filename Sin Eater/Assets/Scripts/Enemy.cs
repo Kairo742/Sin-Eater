@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float movementSpeed = 2f;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private float minimumDetectionRange = 10f;
+    [SerializeField] private float attackLength = 0.7f;
 
     private Animator animator;
     private Rigidbody rb;
@@ -73,7 +74,7 @@ public class EnemyController : MonoBehaviour
     void StartAttack()
     {
         animator.SetBool("isAttacking", true);
-        Invoke("EndAttack", 0.95f);
+        Invoke("EndAttack", 1 / attackLength * 0.95f);
         attackTimer = attackCooldown;
     }
 
