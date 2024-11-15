@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Game Event")]
 public class GameEvent : ScriptableObject
 {
-    private List<GameEventListener> listeners = new List<GameEventListener>();
+    private List<IGameEventListener> listeners = new List<IGameEventListener>();
     private bool IsTriggered = false;
 
     private void OnEnable()
@@ -29,11 +29,11 @@ public class GameEvent : ScriptableObject
             listeners[i].OnEventTriggered();
         }
     }
-    public void AddListener(GameEventListener listener)
+    public void AddListener(IGameEventListener listener)
     {
         listeners.Add(listener);
     }
-    public void RemoveListener(GameEventListener listener)
+    public void RemoveListener(IGameEventListener listener)
     {
         listeners.Remove(listener);
     }

@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MasterEventController : MonoBehaviour
+public class MasterEventController : MonoBehaviour, IGameEventListener
 {
     public GameEvent combinedEvents;
 
     public List<GameEvent> WaitedGameEvents;
 
-
-    public GameEventListener gameEventListener;
-
-    private void Awake()
-    {
-        //gameEventListener = GetComponent<GameEventListener>();
-    }
-
-    private void Start()
+    private void OnEnable()
     {
         foreach (var gameEvent in WaitedGameEvents)
         {
-            gameEvent.AddListener(gameEventListener);
+            gameEvent.AddListener(this);
+        }
+    }
+
+    private void OnDisable()
+    {
+        foreach (var gameEvent in WaitedGameEvents)
+        {
+            gameEvent.RemoveListener(this);
         }
     }
     public void GatherOtherEvents()
@@ -31,5 +31,15 @@ public class MasterEventController : MonoBehaviour
         }
 
         if (allTriggered) combinedEvents.TriggerEvent();
+    }
+
+    public void OnEventTriggered()
+    {
+        GatherOtherEvents();
+    }
+
+    public void OnEventTriggered(GameObject go)
+    {
+        throw new System.NotImplementedException();
     }
 }
