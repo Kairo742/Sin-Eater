@@ -20,6 +20,20 @@ public class GameEvent : ScriptableObject
         }
     }
 
+    public void TriggerEvent(bool withOutSettingIt)
+    {
+        if (withOutSettingIt == false)
+        {
+            TriggerEvent();
+            return;
+        }
+
+        for (int i = listeners.Count - 1; i >= 0; i--)
+        {
+            listeners[i].OnEventTriggered();
+        }
+    }
+
     public void TriggerEvent(GameObject gameObjectToSend)
     {
         IsTriggered = true;

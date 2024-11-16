@@ -6,10 +6,15 @@ public class MasterEventController : MonoBehaviour, IGameEventListener
     public GameEvent combinedEvents;
 
     public List<GameEvent> WaitedGameEvents;
+    public List<GameEvent> UnWantedGameEvents;
 
     private void OnEnable()
     {
         foreach (var gameEvent in WaitedGameEvents)
+        {
+            gameEvent.AddListener(this);
+        }
+        foreach (var gameEvent in UnWantedGameEvents)
         {
             gameEvent.AddListener(this);
         }
@@ -21,6 +26,10 @@ public class MasterEventController : MonoBehaviour, IGameEventListener
         {
             gameEvent.RemoveListener(this);
         }
+        foreach (var gameEvent in UnWantedGameEvents)
+        {
+            gameEvent.RemoveListener(this);
+        }
     }
     public void GatherOtherEvents()
     {
@@ -28,6 +37,10 @@ public class MasterEventController : MonoBehaviour, IGameEventListener
         foreach (var gameEvent in WaitedGameEvents)
         {
             allTriggered &= gameEvent.IsTriggeredBefore();
+        }
+        foreach (var gameEvent in UnWantedGameEvents)
+        {
+            allTriggered &= !gameEvent.IsTriggeredBefore();
         }
 
         if (allTriggered) combinedEvents.TriggerEvent();
