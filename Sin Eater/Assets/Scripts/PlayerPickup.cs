@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerPickup : MonoBehaviour
 {
     private GameObject _hitObj;
-    private bool _isHolding = false,  _outlineIsActive = false;
+    private bool _isHolding = false, _outlineIsActive = false;
     private GameObject _heldObject;
     public Transform HeldObjPos;
     [SerializeField] private LayerMask _pickupableLayers, _interactableLayers;
@@ -17,9 +14,6 @@ public class PlayerPickup : MonoBehaviour
     private Pickupable _heldPickupableScript;
     [SerializeField] private float _raycastDistance = 2f;
 
-    
-    
-
 
     private void Start()
     {
@@ -28,7 +22,7 @@ public class PlayerPickup : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Interact();
         }
@@ -38,7 +32,7 @@ public class PlayerPickup : MonoBehaviour
 
     public void Interact()
     {
-        if(!_isHolding)
+        if (!_isHolding)
         {
             Pickup();
         }
@@ -63,7 +57,7 @@ public class PlayerPickup : MonoBehaviour
         if (hit.Length > 0)
         {
 
-            if(hit.Length > 1)
+            if (hit.Length > 1)
             {
 
                 RaycastHit centerHit;
@@ -72,7 +66,7 @@ public class PlayerPickup : MonoBehaviour
                 Physics.Raycast(centerRay, out centerHit, _raycastDistance);
 
 
-                
+
                 _hitObj = GetClosestObject(centerHit.point, hit).gameObject;
             }
             else
@@ -85,7 +79,7 @@ public class PlayerPickup : MonoBehaviour
             Ray ray = new Ray(origin: transform.position, direction: (_hitObj.transform.position - transform.position));
             if (Physics.Raycast(ray, out hitPoint, _raycastDistance))
             {
-                if(hitPoint.transform.gameObject != _hitObj.transform.gameObject)
+                if (hitPoint.transform.gameObject != _hitObj.transform.gameObject)
                 {
                     return;
                 }
@@ -128,7 +122,7 @@ public class PlayerPickup : MonoBehaviour
 
     private void Pickup()
     {
-        if(_outlineIsActive && !_isHolding)
+        if (_outlineIsActive && !_isHolding)
         {
             if (Helpers.IsInLayerMask(_pickupableLayers, _heldObject.layer) && _heldObject.GetComponent<Rigidbody>() != null)  //&& _heldObject.TryGetComponent<Rigidbody>(out Rigidbody _) && _heldObject.TryGetComponent<Pickupable>(out Pickupable _)
             {
@@ -155,7 +149,7 @@ public class PlayerPickup : MonoBehaviour
 
 
         _heldRB = _heldObject.GetComponent<Rigidbody>();
-        
+
         _heldRB.linearVelocity = Vector3.zero;
         _heldRB.isKinematic = true;
 
@@ -203,7 +197,7 @@ public class PlayerPickup : MonoBehaviour
     }
 
 
-    
+
     private void AddOutline()
     {
         if (_heldObject.TryGetComponent<Outline>(out Outline outline)) outline.enabled = true;
