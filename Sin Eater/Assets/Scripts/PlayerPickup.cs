@@ -15,9 +15,6 @@ public class PlayerPickup : MonoBehaviour
     [SerializeField] private float _raycastDistance = 2f;
 
 
-
-
-
     private void Start()
     {
         InvokeRepeating("CheckPickupAbility", 0f, 0.05f);       //Better than calling it every update frame
@@ -97,7 +94,7 @@ public class PlayerPickup : MonoBehaviour
             //If last hit is different from this hit
             if (_heldObject != null && _hitObj != _heldObject && _outlineIsActive)
             {
-                RemoveOutline(_heldObject.transform.gameObject);
+                RemoveOutline();
             }
 
 
@@ -113,7 +110,7 @@ public class PlayerPickup : MonoBehaviour
         {
             if (_outlineIsActive)
             {
-                RemoveOutline(_heldObject);
+                RemoveOutline();
             }
 
 
@@ -213,9 +210,13 @@ public class PlayerPickup : MonoBehaviour
 
 
 
-    private void RemoveOutline(GameObject go)
+    private void RemoveOutline()
     {
-        _heldObject.GetComponent<Outline>().enabled = false;
+        if(_heldObject != null && _heldObject.TryGetComponent<Outline>(out Outline outline))
+        {
+            outline.enabled = false;
+        }
+
 
         _outlineIsActive = false;
     }

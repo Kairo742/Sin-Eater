@@ -59,7 +59,7 @@ public class TorchLight : Interactable
         var x = _particles.main;
         x.loop = false;
 
-
+        gameObject.layer = LayerMask.NameToLayer("Default");
 
         _hasLightLeft = false;
     }
@@ -70,13 +70,15 @@ public class TorchLight : Interactable
         x.loop = true;
         _particles.Play();
 
-
+        gameObject.layer = LayerMask.NameToLayer("Light Source");
 
         _hasLightLeft = true;
     }
 
     public override void Interact()
     {
+        if (!_hasLightLeft) return;
+
         PlayerLightSystem.Instance.AddLightAmount(_lightAmountForPlayer);
         NoLightLeft();
     }

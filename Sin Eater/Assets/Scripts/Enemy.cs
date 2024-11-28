@@ -1,45 +1,89 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Animations;
 
-public class Enemy : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject shot;
-    [SerializeField] private float playerSensitivity; // This variable controls how sensitive the enemy is to the player. Higher is more sensitive.
-    [SerializeField] private float shootDelayTime = 2f;
-    [SerializeField] private float shootStrength = 10f;
+    [SerializeField] private float playerSensitivity = 5f;
+    [SerializeField] private float attackDistance = 4f;
+    [SerializeField] private float movementSpeed = 2f;
+    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private float minimumDetectionRange = 10f;
+    [SerializeField] private float attackLength = 0.7f;
 
-    private bool detectedPlayer;
+    private Animator animator;
+    private Rigidbody rb;
+    private float attackTimer = 0f;
 
     void Start()
     {
-        InvokeRepeating("ShootPlayer", 0.5f, shootDelayTime);
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        if (Vector3.Distance(player.transform.position, transform.position) / PlayerLightSystem.Instance.LightAmount < playerSensitivity) // Higher the light, the more chance of being found
-        {
-            detectedPlayer = true;
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-            transform.LookAt(player.transform.position);
-        }
-        else // If player moves out of range, disable the turret
+        if (!IsPlayerDetected())
         {
-            detectedPlayer = false;
+            animator.SetFloat("speed", 0f);
+        }
+
+        if (IsPlayerDetected() && distanceToPlayer > attackDistance)
+        {
+            Vector3 pos = player.transform.position;
+            pos.y = transform.position.y;
+
+            Vector3 direction = (pos - transform.position).normalized;
+            rb.position += direction * movementSpeed * Time.deltaTime;
+            transform.LookAt(pos);
+
+            animator.SetFloat("speed", movementSpeed);
+        }
+        else
+        {
+            animator.SetFloat("speed", 0f);
+        }
+
+        if (distanceToPlayer <= attackDistance && attackTimer <= 0f)
+        {
+            StartAttack();
+        }
+
+        if (attackTimer > 0f)
+        {
+            attackTimer -= Time.deltaTime;
         }
     }
 
-    void ShootPlayer()
+    bool IsPlayerDetected()
     {
-        // I have no idea what the turret is supposed to do, but I put in a basic "cannonball" shoot mechanism
-
-        if (detectedPlayer)
+        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        float detectionThreshold = distanceToPlayer / Mathf.Clamp(PlayerLightSystem.Instance.LightAmount, 0.1f, Mathf.Infinity);
+        if (distanceToPlayer <= minimumDetectionRange)
         {
-            var cannonball = Instantiate(shot, transform.position + transform.forward * 2f, transform.rotation);
-            cannonball.GetComponent<Rigidbody>().AddForce(transform.forward * shootStrength);
-            Physics.IgnoreCollision(cannonball.GetComponent<Collider>(), GetComponent<Collider>(), true);
+            return true;
+        }
+        else
+        {
+            return detectionThreshold < playerSensitivity;
+        }
+    }
+
+    void StartAttack()
+    {
+        animator.SetBool("isAttacking", true);
+        Invoke("EndAttack", 1 / attackLength * 0.95f);
+        attackTimer = attackCooldown;
+    }
+
+    void EndAttack()
+    {
+        animator.SetBool("isAttacking", false);
+        if (Vector3.Distance(player.transform.position, transform.position) < attackDistance + 1f)
+        {
+            player.GetComponent<PlayerMovement>().Attacked(1f);
         }
     }
 }
