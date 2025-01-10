@@ -296,6 +296,7 @@ MonoBehaviour:
   recoveryRoom: {fileID: 7654019795172112766, guid: 8eed9d21383abae4187bc40c516ba38d, type: 3}
   miniBossRoom: {fileID: 5861419872248296271, guid: ba957bf345f477e4a9652b9f36d25d44, type: 3}
   bossRoom: {fileID: 5879809248379469391, guid: c5dadb2473164fe42a23ac5269234073, type: 3}
+  nodeManager: {fileID: 9037261833057555425, guid: 032f7d16f86096a42a78ef1aa14c1cc1, type: 3}
 --- !u!4 &1248670368
 Transform:
   m_ObjectHideFlags: 0
@@ -305,7 +306,7 @@ Transform:
   m_GameObject: {fileID: 1248670366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.517626, y: -34.229206, z: -11.069152}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

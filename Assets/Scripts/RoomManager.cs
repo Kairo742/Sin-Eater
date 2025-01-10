@@ -42,6 +42,9 @@ public class RoomManager : MonoBehaviour
     private int generationAttempts = 0;
     private const int maxAttempts = 1000;
 
+    public GameObject node;
+    public Node nodeManager;
+
 
     private void Start()
     {
@@ -50,6 +53,8 @@ public class RoomManager : MonoBehaviour
 
         Vector2Int initialRoomIndex = new Vector2Int(gridSizeX / 2, gridSizeY / 2);
         StartRoomGenerationFromRoom(initialRoomIndex);
+
+
     }
 
     private void Update()
@@ -122,8 +127,23 @@ public class RoomManager : MonoBehaviour
 
     private void FinalizeDungeonGeneration()
     {
+      
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (roomGrid[x, y] != 0)
+                {
+                    Vector2Int roomIndex = new Vector2Int(x, y);
+                    AttachNodes(roomPrefab, roomIndex);
+                }
+            }
+        }
+
+        
         //PlaceEnermies();
         //PlaceItems();
+
         Debug.Log("Dungeon finalization complete.");
     }
 
@@ -291,12 +311,34 @@ public class RoomManager : MonoBehaviour
         return count;
     }
 
-    private void AttachNodes()
+    private void AttachNodes(GameObject room, Vector2Int roomIndex)
     {
-        if (x > 0 && roomGrid[x - 1, y] != 0) count++; // Left neighbor
-        if (x < gridSizeX - 1 && roomGrid[x + 1, y] != 0) count++; // Right neighbor
-        if (y > 0 && roomGrid[x, y - 1] != 0) count++; // Bottom neighbor
-        if (y < gridSizeY - 1 && roomGrid[x, y + 1] != 0) count++; // Top neighbor
+        int x = roomIndex.x;
+        int y = roomIndex.y;
+
+        if (x > 0 && roomGrid[x - 1, y] != 0) // Left neighbor
+        {
+            Node newNode = Instantiate(node);
+            nodeManager.AddNode(newNode);
+        }
+
+        if (x < gridSizeX - 1 && roomGrid[x + 1, y] != 0) // Right neighbor 
+        {
+            Node newNode = Instantiate(node);
+            nodeManager.AddNode(newNode);
+        }
+
+        if (y > 0 && roomGrid[x, y - 1] != 0) // Bottom neighbor
+        {
+            Node newNode = Instantiate(node);
+            nodeManager.AddNode(newNode);
+        }
+
+        if (y < gridSizeY - 1 && roomGrid[x, y + 1] != 0)  // Top neighbor
+        {
+            Node newNode = Instantiate(node);
+            nodeManager.AddNode(newNode);
+        }
     }
 
     private int CountRoomString(Vector2Int roomIndex)
