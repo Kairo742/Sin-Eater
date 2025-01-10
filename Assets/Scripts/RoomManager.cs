@@ -9,15 +9,15 @@ using UnityEngine.UIElements;
 public class RoomManager : MonoBehaviour
 {
     [SerializeField] GameObject roomPrefab;
-    [SerializeField] private int maxRooms = 15;
-    [SerializeField] private int minRooms = 8;
+    [SerializeField] private int maxRooms = 20;
+    [SerializeField] private int minRooms = 15;
 
 
     int roomWidth = 20;
     int roomHeight = 12;
 
-    [SerializeField] int gridSizeX = 10;
-    [SerializeField] int gridSizeY = 10;
+    [SerializeField] int gridSizeX = 11;
+    [SerializeField] int gridSizeY = 11;
     
     private List<GameObject> roomObjects = new List<GameObject>();
 
@@ -102,10 +102,6 @@ public class RoomManager : MonoBehaviour
 
             FinalizeDungeonGeneration();
         }
-        //else if (IsValid = true)
-        {
-            //RegenerateRooms();
-        }
 
     }
 
@@ -124,86 +120,8 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    private void ReplaceRoomWithSpecialPrefab(GameObject targetRoom, GameObject prefab, Vector2Int position)
-    {
-        if (targetRoom != null)
-        {
-            Instantiate(prefab, targetRoom.transform.position, Quaternion.identity);
-
-            roomObjects.Remove(targetRoom);
-            Destroy(targetRoom);
-
-            roomGrid[position.x, position.y] = 1;
-        }
-        else
-        {
-            Debug.LogError("Couldn't place special prefabs.");
-        }
-    }
-
-    private void SpecialRoomGeneration()
-    {
-        if (roomObjects.Count == 0)
-        {
-            Debug.LogError("No room objects found in roomObjects list.");
-            return;
-        }
-
-
-        Vector2Int startRoomPosition = GetRoomGridPosition(roomObjects[0].transform.position);
-        Vector2Int bossRoomPosition = GetRoomGridPosition(roomObjects[roomObjects.Count - 1].transform.position);
-       
-
-        int[,] grid = new int[gridSizeX, gridSizeY];
-
-        List<Vector2Int> pathToBoss = FindPath(startRoomPosition, bossRoomPosition, roomGrid);
-
-        
-
-        if (roomObjects.Count > 0)
-        {
-            ReplaceRoomWithPrefab(roomObjects[0], startRoom);
-            ReplaceRoomWithPrefab(roomObjects[roomObjects.Count - 1], bossRoom);
-        }
-        else
-        {
-            Debug.LogError("No room objects found in roomObjects list.");
-        }
-        
-        if (pathToBoss == null)
-        {
-            Debug.LogError("roomObjects is null. Cannot proceed.");
-            return;
-        }
-        if (pathToBoss.Count == 0)
-        {
-            Debug.LogError("roomObjects is empty. Cannot proceed.");
-
-            return;
-        }
-        if (pathToBoss.Count >= 4)
-        {
-            Vector2Int recoveryRoomPosition = GetRoomGridPosition(roomObjects[pathToBoss.Count - 2].transform.position);
-            Vector2Int miniBossRoomPosition = GetRoomGridPosition(roomObjects[pathToBoss.Count - 3].transform.position);
-
-            ReplaceRoomWithSpecialPrefab(roomObjects[pathToBoss.Count - 2], recoveryRoom, recoveryRoomPosition);
-            ReplaceRoomWithSpecialPrefab(roomObjects[pathToBoss.Count - 3], miniBossRoom, miniBossRoomPosition);
-  
-        }
-        else
-        {
-            //RegenerateRooms();
-            Debug.LogError("Not enough rooms in the path to place recovery and mini-boss rooms.");
-        }
-        
-        
-        Debug.Log("Special rooms placed.");
-    }
-
     private void FinalizeDungeonGeneration()
     {
-        SpecialRoomGeneration();
-
         //PlaceEnermies();
         //PlaceItems();
         Debug.Log("Dungeon finalization complete.");
@@ -311,66 +229,6 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    public List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal, int[,] grid)
-    {
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
-        bool[,] visited = new bool[grid.GetLength(0), grid.GetLength(1)];
-
-        queue.Enqueue(start);
-        visited[start.x, start.y] = true;
-
-        Vector2Int[] directions = {
-        new Vector2Int(1, 0),  // Right
-        new Vector2Int(-1, 0), // Left
-        new Vector2Int(0, 1),  // Up
-        new Vector2Int(0, -1)  // Down
-    };
-
-        while (queue.Count > 0)
-        {
-            Vector2Int current = queue.Dequeue();
-            Debug.Log($"Current position: {current}");
-
-            if (current == goal)
-            {
-                List<Vector2Int> path = new List<Vector2Int>();
-                while (cameFrom.ContainsKey(current))
-                {
-                    path.Add(current);
-                    current = cameFrom[current];
-                }
-                path.Reverse();
-                Debug.Log("Path found!");
-                return path;
-            }
-
-            foreach (var dir in directions)
-            {
-                Vector2Int neighbor = current + dir;
-                Debug.Log($"Checking neighbor: {neighbor}");
-
-                if (IsValid(neighbor, grid) && !visited[neighbor.x, neighbor.y])
-                {
-                    queue.Enqueue(neighbor);
-                    visited[neighbor.x, neighbor.y] = true;
-                    cameFrom[neighbor] = current;
-                }
-            }
-        }
-
-        Debug.LogError("No path found.");
-        return null;
-    }
-
-    public bool IsValid(Vector2Int position, int[,] grid)
-    {
-        return position.x >= 0 && position.x < grid.GetLength(0) &&
-               position.y >= 0 && position.y < grid.GetLength(1) &&
-               grid[position.x, position.y] == 0; 
-
-    }
-
     void OpenDoors(GameObject room, int x, int y)
     {
         Room newRoomScript = room.GetComponent<Room>();
@@ -431,6 +289,14 @@ public class RoomManager : MonoBehaviour
         if (y < gridSizeY - 1 && roomGrid[x, y + 1] != 0) count++; // Top neighbor
 
         return count;
+    }
+
+    private void AttachNodes()
+    {
+        if (x > 0 && roomGrid[x - 1, y] != 0) count++; // Left neighbor
+        if (x < gridSizeX - 1 && roomGrid[x + 1, y] != 0) count++; // Right neighbor
+        if (y > 0 && roomGrid[x, y - 1] != 0) count++; // Bottom neighbor
+        if (y < gridSizeY - 1 && roomGrid[x, y + 1] != 0) count++; // Top neighbor
     }
 
     private int CountRoomString(Vector2Int roomIndex)
