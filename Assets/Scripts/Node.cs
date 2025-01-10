@@ -5,7 +5,7 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     public Node cameFrom;
-    public List<Node> connections = new List<Node>();
+    public List<Node> connections;
 
     public float gScore;
     public float hScore;
@@ -15,9 +15,4 @@ public class Node : MonoBehaviour
         return gScore + hScore;
     }
 
-    public void AddNode(Node node)
-    {
-        connections.Add(node);
-        Debug.Log("Node added to list.");
-    }
 }

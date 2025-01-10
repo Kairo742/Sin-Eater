@@ -46,8 +46,6 @@ public class RoomManager : MonoBehaviour
     private int generationAttempts = 0;
     private const int maxAttempts = 1000;
 
-    public Dictionary<int, GameObject> roomPrefabs;
-
 
     private void Start()
     {
@@ -299,39 +297,6 @@ public class RoomManager : MonoBehaviour
         if (y < gridSizeY - 1 && roomGrid[x, y + 1] != 0) count++; // Top neighbor
 
         return count;
-    }
-
-    private void PopulateConnections(int x, int y)
-    {
-        int[,] neighborOffsets = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-        
-        for (int i = 0; i < 4; i++)
-        {
-            int neighborX = x + neighborOffsets[i, 0];
-            int neighborY = y + neighborOffsets[i, 1];
-
-            // Check bounds
-            if (neighborX >= 0 && neighborX < roomGrid.GetLength(0) &&
-                neighborY >= 0 && neighborY < roomGrid.GetLength(1) &&
-                roomGrid[neighborX, neighborY] != 0)
-            {
-                int roomID = roomGrid[neighborX, neighborY];
-                if (roomPrefabs.TryGetValue(roomID, out GameObject roomPrefab))
-                {
-                    Node Node = roomPrefab.GetComponent<Node>();
-                    if (Node != null)
-                    {
-                        Node.connections.Add(Node);
-                    }
-                }
-                
-                //Node Node = roomGrid[neighborX, neighborY].GetComponent<Node>();
-                //if (Node != null)
-                {
-                    //Node.connections.Add(Node);
-                }
-            }
-        }
     }
 
     private int CountRoomString(Vector2Int roomIndex)

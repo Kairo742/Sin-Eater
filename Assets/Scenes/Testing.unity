@@ -296,7 +296,6 @@ MonoBehaviour:
   recoveryRoom: {fileID: 7654019795172112766, guid: 8eed9d21383abae4187bc40c516ba38d, type: 3}
   miniBossRoom: {fileID: 5861419872248296271, guid: ba957bf345f477e4a9652b9f36d25d44, type: 3}
   bossRoom: {fileID: 5879809248379469391, guid: c5dadb2473164fe42a23ac5269234073, type: 3}
-  nodeManager: {fileID: 9037261833057555425, guid: 032f7d16f86096a42a78ef1aa14c1cc1, type: 3}
 --- !u!4 &1248670368
 Transform:
   m_ObjectHideFlags: 0

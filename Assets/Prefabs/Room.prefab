@@ -871,6 +871,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9037261833057555425, guid: 032f7d16f86096a42a78ef1aa14c1cc1, type: 3}
+      propertyPath: connections.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037261833057555425, guid: 032f7d16f86096a42a78ef1aa14c1cc1, type: 3}
       propertyPath: 'connections.Array.data[4]'
       value: 
       objectReference: {fileID: 0}
