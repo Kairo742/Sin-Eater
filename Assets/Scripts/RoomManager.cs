@@ -1,8 +1,12 @@
+using JetBrains.Annotations;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -42,8 +46,7 @@ public class RoomManager : MonoBehaviour
     private int generationAttempts = 0;
     private const int maxAttempts = 1000;
 
-    public GameObject node;
-    public Node nodeManager;
+    public Dictionary<int, GameObject> roomPrefabs;
 
 
     private void Start()
@@ -127,20 +130,7 @@ public class RoomManager : MonoBehaviour
 
     private void FinalizeDungeonGeneration()
     {
-      
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                if (roomGrid[x, y] != 0)
-                {
-                    Vector2Int roomIndex = new Vector2Int(x, y);
-                    AttachNodes(roomPrefab, roomIndex);
-                }
-            }
-        }
 
-        
         //PlaceEnermies();
         //PlaceItems();
 
@@ -311,33 +301,36 @@ public class RoomManager : MonoBehaviour
         return count;
     }
 
-    private void AttachNodes(GameObject room, Vector2Int roomIndex)
+    private void PopulateConnections(int x, int y)
     {
-        int x = roomIndex.x;
-        int y = roomIndex.y;
-
-        if (x > 0 && roomGrid[x - 1, y] != 0) // Left neighbor
+        int[,] neighborOffsets = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+        
+        for (int i = 0; i < 4; i++)
         {
-            Node newNode = Instantiate(node);
-            nodeManager.AddNode(newNode);
-        }
+            int neighborX = x + neighborOffsets[i, 0];
+            int neighborY = y + neighborOffsets[i, 1];
 
-        if (x < gridSizeX - 1 && roomGrid[x + 1, y] != 0) // Right neighbor 
-        {
-            Node newNode = Instantiate(node);
-            nodeManager.AddNode(newNode);
-        }
-
-        if (y > 0 && roomGrid[x, y - 1] != 0) // Bottom neighbor
-        {
-            Node newNode = Instantiate(node);
-            nodeManager.AddNode(newNode);
-        }
-
-        if (y < gridSizeY - 1 && roomGrid[x, y + 1] != 0)  // Top neighbor
-        {
-            Node newNode = Instantiate(node);
-            nodeManager.AddNode(newNode);
+            // Check bounds
+            if (neighborX >= 0 && neighborX < roomGrid.GetLength(0) &&
+                neighborY >= 0 && neighborY < roomGrid.GetLength(1) &&
+                roomGrid[neighborX, neighborY] != 0)
+            {
+                int roomID = roomGrid[neighborX, neighborY];
+                if (roomPrefabs.TryGetValue(roomID, out GameObject roomPrefab))
+                {
+                    Node Node = roomPrefab.GetComponent<Node>();
+                    if (Node != null)
+                    {
+                        Node.connections.Add(Node);
+                    }
+                }
+                
+                //Node Node = roomGrid[neighborX, neighborY].GetComponent<Node>();
+                //if (Node != null)
+                {
+                    //Node.connections.Add(Node);
+                }
+            }
         }
     }
 
